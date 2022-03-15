@@ -1,0 +1,1 @@
+python main.py & (python upload.py) & wait %1

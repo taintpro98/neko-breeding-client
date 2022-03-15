@@ -7,7 +7,7 @@ import json
 from os import walk
 
 nameObject = ['body','ear','nose','eye','eyebrow','medal','necklaces','top','front face','side face','arms','accessories','back','background']
-workDir = os.path.join("C:"+ os.sep, 'Users', 'bruno', 'Documents', 'bruno', 'demo')
+workDir = os.path.join("C:"+ os.sep, 'Users', 'bruno', 'Documents', 'bruno', 'neko-breeding-client')
 pathSave = os.path.join(workDir, "save")
 tail = ".png"
 
@@ -39,7 +39,6 @@ def render(name, jsonData):
     y = json.loads(jsonData)
     
     for data in y:
-        print("yyyyy", data)
         TurnObjectOn(str(data) ,str(y[data]),0)
 
     logOut = str(name)
@@ -53,6 +52,9 @@ def render(name, jsonData):
     while c4d.CheckIsRunning ( c4d.CHECKISRUNNING_EXTERNALRENDERING )==True:
         print('rendering')
         time.sleep(2)
+    
+    # files = {'neko': open(fullPath, 'rb')}
+    # requests.post(URL + "/upload", files=files)
 
 def main():
     print ('--------------------Start rendering----------------')
@@ -60,17 +62,18 @@ def main():
     for d in nameObject:
         listObject[d] = []
         FindAllAndFill(d,listObject[d])
-
-    for idx in range(10):
+    idx = 0
+    while True:
         r = requests.get(url = URL)
         data = r.json()
         print(data)
         render(data['name'] + str(idx), data['data'])
-
+        idx += 1
+        
     c4d.CallCommand(12098)
     doc.EndUndo()
     c4d.CallCommand(100004728)
     c4d.EventAdd()
-
+    
 if __name__=='__main__':
     main()
