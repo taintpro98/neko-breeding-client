@@ -1,1 +1,1 @@
-python main.py & (python upload.py) & wait %1
+python upload.py & (python main.py) & wait %1

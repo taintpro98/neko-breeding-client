@@ -3,8 +3,13 @@ import time
 import requests
 import os
 import json
-from os import walk
-from constants import savePath, nameObject, tail, URL
+
+URL = "http://localhost:5000/"
+getUrl = URL + "get"
+nameObject = ['body','ear','nose','eye','eyebrow','medal','necklaces','top','front face','side face','arms','accessories','back','background']
+workDir = os.path.join("C:"+ os.sep, 'Users', 'bruno', 'Documents', 'bruno', 'neko-breeding-client')
+savePath = os.path.join(workDir, "save")
+tail = ".png"
 
 listObject = {}
 
@@ -51,7 +56,7 @@ def main():
         FindAllAndFill(d,listObject[d])
     idx = 0
     while True:
-        r = requests.get(url = URL)
+        r = requests.get(url = getUrl)
         data = r.json()
         print(data)
         render(data['name'] + str(idx), data['data'])
