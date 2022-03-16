@@ -1,21 +1,27 @@
 import requests
 import os
-import os
-from pathlib import Path
+import glob
+from constants import savePath, URL
 
-workDir = os.path.join("C:"+ os.sep, 'Users', 'bruno', 'Documents', 'bruno', 'neko-breeding-client')
-pathSave = os.path.join(workDir, "save")
 nekoImagesCount = 0
 nekoImages = list()
 
-URL = "http://localhost:5000"
+def upload(filepath):
+    try:
+        print('uploading {}'.format(filepath))
+        with open(filepath, 'rb') as fh:
+            files = {'neko': fh}
+            print("2", files)
+            res = requests.post(URL + "/upload", files=files)
+            print("response", res)
+            res.close()
+    except:
+        upload(filepath)
 
-# while True:
-#     print("waiting...")
-#     nekoImages = sorted(Path(pathSave).iterdir(), key=os.path.getmtime)
-#     if nekoImagesCount < len(nekoImages):
-#         print('uploading {}'.format(nekoImages[-1]))
-#         files = {'neko': open(nekoImages[-1], 'rb')}
-#         requests.post(URL + "/upload", files=files)
-#     nekoImagesCount += 1
-print("upload")
+while True:
+    # nekoImages = [fn for fn in sorted(Path(pathSave).iterdir(), key=os.path.getmtime) if fn.as_posix().endswith("png")]
+    nekoImages = list(filter(os.path.isfile, glob.glob(os.path.join(savePath, "*.png"))))
+    nekoImages.sort(key=lambda x: os.path.getmtime(x))
+    if nekoImagesCount < len(nekoImages):
+        upload(nekoImages[-1])
+        nekoImagesCount += 1

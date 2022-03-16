@@ -2,16 +2,9 @@ import c4d
 import time
 import requests
 import os
-import csv
 import json
 from os import walk
-
-nameObject = ['body','ear','nose','eye','eyebrow','medal','necklaces','top','front face','side face','arms','accessories','back','background']
-workDir = os.path.join("C:"+ os.sep, 'Users', 'bruno', 'Documents', 'bruno', 'neko-breeding-client')
-pathSave = os.path.join(workDir, "save")
-tail = ".png"
-
-URL = "http://localhost:5000"
+from constants import savePath, nameObject, tail, URL
 
 listObject = {}
 
@@ -37,14 +30,11 @@ def TurnObjectOn(nameObject, id, isOn):
 
 def render(name, jsonData):
     y = json.loads(jsonData)
-    
     for data in y:
         TurnObjectOn(str(data) ,str(y[data]),0)
-
     logOut = str(name)
     print(name)
-
-    fullPath = os.path.join(pathSave, logOut + tail)
+    fullPath = os.path.join(savePath, logOut + tail)
     print("fullPath", fullPath)
     rd = doc.GetActiveRenderData()
     rd[c4d.RDATA_PATH]= fullPath
@@ -52,9 +42,6 @@ def render(name, jsonData):
     while c4d.CheckIsRunning ( c4d.CHECKISRUNNING_EXTERNALRENDERING )==True:
         print('rendering')
         time.sleep(2)
-    
-    # files = {'neko': open(fullPath, 'rb')}
-    # requests.post(URL + "/upload", files=files)
 
 def main():
     print ('--------------------Start rendering----------------')
